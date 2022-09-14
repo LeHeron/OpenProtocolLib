@@ -1,0 +1,8 @@
+<RCC>
+    <qresource prefix="/">
+        <file>main.qml</file>
+        <file>Status.qml</file>
+        <file>MidSender.qml</file>
+        <file>Parameter.qml</file>
+    </qresource>
+</RCC>

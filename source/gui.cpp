@@ -24,17 +24,18 @@
  ****************************************************************************
  */
 #include "gui.h"
+#include "d_open_protocol.h"
 #include <QDebug>
 
 GUI::GUI(QObject *parent)
 	: QObject{parent}
 {
-
+	connect(&dp, &DOpenProtocol::disconnected, this, [this](){emit connected(false);});
 }
 
 void GUI::helloThere()
 {
-	qDebug() << "Hello there !\n General Kenobi ???????";
+	qDebug() << "Hello there !\nGeneral Kenobi ???????";
 }
 
 
@@ -54,7 +55,45 @@ bool GUI::sendMid(QString mid, QList<QString> paramValue, QList<int> paramIndex)
 		param[paramIndex[i]] = paramValue[i].toUtf8();
 	}
 
-	emit updateResponse("pickle rick");
+	// Create mid
+	bool flag;
+	int midInt = mid.toInt(&flag);
+	if (!flag) // Fail if string contains other char than digits
+		return false;
+	mid_ptr midObj = DOpenProtocolMap::getMap()[static_cast<DOpenProtocolMid::midType>(midInt)]->createMid(param);
 
-	return false;
+	// Bind response
+	connect(midObj.get(), &DOpenProtocolMid::onResponse, this, [this, midObj](){
+		QList<int> indexValue;
+		QList<QByteArray> paramValue;
+
+		QMap<int, QByteArray> dataFields = midObj->getDataFields();
+		for (auto e : dataFields.keys()) {
+			indexValue.append(e);
+			paramValue.append(dataFields[e]);
+		}
+
+		emit updateResponse(midObj->mid_ID, indexValue, paramValue);
+	});
+
+	// Send mid
+	dp.sendMid(midObj);
+
+	return true;
+}
+
+void GUI::doConnect()
+{
+	QString addr = "localhost";
+	//QString addr = "192.168.1.100";
+	if (!dp.doConnect(addr))
+		return;
+
+	mid_ptr initMid = DOpenProtocolMap::getMap()[DOpenProtocolMid::MID0001]->createMid({});
+	connect(initMid.get(), &DOpenProtocolMid::onResponse, this, [this, initMid](){
+		if (initMid->getResponse()->mid_ID == 2)
+			emit connected(true);
+	});
+
+	dp.sendMid(initMid);
 }

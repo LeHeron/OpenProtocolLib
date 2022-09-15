@@ -56,5 +56,7 @@ int main(int argc, char *argv[])
 	engine.rootContext()->setContextProperty("gui", &gui);
 	engine.load(url);
 
+	gui.doConnect();
+
 	return app.exec();
 }

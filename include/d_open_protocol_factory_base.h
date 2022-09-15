@@ -1,8 +1,8 @@
 /*!
- * \file gui.h
- * \brief file for the definition of the class "GUI"
- * \author dogadev
- * \date 2022-9-14
+ * \file include/d_open_protocol_factory_base.h
+ * \brief file for the definition of the class "DOpenProtocolFactoryBase"
+ * \author poles
+ * \date 2022-9-8
  *
  * \details
  *
@@ -23,32 +23,18 @@
  *
  ****************************************************************************
  */
-#ifndef GUI_H
-#define GUI_H
+#ifndef DOPENPROTOCOLFACTORYBASE_H
+#define DOPENPROTOCOLFACTORYBASE_H
 
-#include "d_open_protocol.h"
 #include "d_open_protocol_mid.h"
-#include "d_open_protocol_map.h"
-#include <QObject>
-#include <QMap>
+class DOpenProtocolMid;
 
-class GUI : public QObject
+class DOpenProtocolFactoryBase
 {
-	Q_OBJECT
 public:
-	explicit GUI(QObject *parent = nullptr);
-
-public slots:
-	void doConnect();
-	void helloThere();
-	void addParameter();
-	bool sendMid(QString mid, QList<QString> paramValue, QList<int> paramIndex);
-signals:
-	void updateResponse(int mid, QList<int> indexValue, QList<QByteArray> paramValue);
-	void connected(bool isConnected);
-
-private:
-	DOpenProtocol dp;
+	virtual std::shared_ptr<DOpenProtocolMid> createMid(QString&) const = 0;
+	virtual std::shared_ptr<DOpenProtocolMid> createMid(QByteArray&) const = 0;
+	virtual std::shared_ptr<DOpenProtocolMid> createMid(QMap<int, QByteArray> args) const = 0;
 };
 
-#endif // GUI_H
+#endif // DOPENPROTOCOLFACTORYBASE_H

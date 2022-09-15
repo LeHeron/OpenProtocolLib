@@ -1,8 +1,8 @@
 /*!
- * \file gui.h
- * \brief file for the definition of the class "GUI"
- * \author dogadev
- * \date 2022-9-14
+ * \file dource/d_mid0005.cpp
+ * \brief file for the definition of the class "DMid0005"
+ * \author poles
+ * \date 2022-9-7
  *
  * \details
  *
@@ -23,32 +23,29 @@
  *
  ****************************************************************************
  */
-#ifndef GUI_H
-#define GUI_H
+#include "mids/d_mid0005.h"
 
-#include "d_open_protocol.h"
-#include "d_open_protocol_mid.h"
-#include "d_open_protocol_map.h"
-#include <QObject>
-#include <QMap>
-
-class GUI : public QObject
+void DMid0005::processData(QByteArray data_byte_array)
 {
-	Q_OBJECT
-public:
-	explicit GUI(QObject *parent = nullptr);
+	data_fields.insert(-1, data_byte_array.mid(0, 4)); // Accepted Mid
 
-public slots:
-	void doConnect();
-	void helloThere();
-	void addParameter();
-	bool sendMid(QString mid, QList<QString> paramValue, QList<int> paramIndex);
-signals:
-	void updateResponse(int mid, QList<int> indexValue, QList<QByteArray> paramValue);
-	void connected(bool isConnected);
+}
 
-private:
-	DOpenProtocol dp;
-};
 
-#endif // GUI_H
+DMid0005::DMid0005(QByteArray arr)
+	: DOpenProtocolMid(arr)
+{
+	DMid0005::processData(arr.mid(20, -1));
+}
+
+DMid0005::DMid0005(QMap<int, QByteArray> args)
+{
+	data_fields = args;
+	QString header_str = formatNumber(getDataFieldsLength() + 20, 4);
+	header_str += "0005   0000     ";
+
+	header = std::make_shared<DOpenProtocolHeader>(header_str);
+
+	// Assign MID enum from its ID
+	mid_ID = static_cast<midType>(header->mid);
+}

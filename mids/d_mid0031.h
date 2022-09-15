@@ -1,8 +1,8 @@
 /*!
- * \file gui.h
- * \brief file for the definition of the class "GUI"
- * \author dogadev
- * \date 2022-9-14
+ * \file include/d_mid0031.h
+ * \brief file for the definition of the class "DMid0031"
+ * \author poles
+ * \date 2022-9-7
  *
  * \details
  *
@@ -23,32 +23,21 @@
  *
  ****************************************************************************
  */
-#ifndef GUI_H
-#define GUI_H
+#ifndef DMID0031_H
+#define DMID0031_H
 
-#include "d_open_protocol.h"
+
 #include "d_open_protocol_mid.h"
-#include "d_open_protocol_map.h"
-#include <QObject>
-#include <QMap>
 
-class GUI : public QObject
+class DMid0031 : public DOpenProtocolMid
 {
-	Q_OBJECT
 public:
-	explicit GUI(QObject *parent = nullptr);
+	explicit	DMid0031(QByteArray arr);
+	explicit	DMid0031(QString str)		: DMid0031(str.toUtf8()) {}
+	explicit	DMid0031(QMap<int, QByteArray> args);
 
-public slots:
-	void doConnect();
-	void helloThere();
-	void addParameter();
-	bool sendMid(QString mid, QList<QString> paramValue, QList<int> paramIndex);
-signals:
-	void updateResponse(int mid, QList<int> indexValue, QList<QByteArray> paramValue);
-	void connected(bool isConnected);
-
-private:
-	DOpenProtocol dp;
+protected:
+	void processData(QByteArray data_byte_array) override;
 };
 
-#endif // GUI_H
+#endif // DMID0031_H

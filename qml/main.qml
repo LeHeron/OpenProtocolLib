@@ -12,13 +12,19 @@ Window {
 	title: qsTr("Hello World")
 	Material.theme: Material.Dark;
 
-	Connections {
-		target: gui
-		function onUpdateResponse(response) {
-			responseField.text = response
-		}
+	function clearResponse() {
+		responseField.text = ""
 	}
 
+	Connections {
+		target: gui
+		function onUpdateResponse(mid, indexValue, paramValue) {
+
+			responseField.text = "MID: " + mid
+			for (var i = 0; i < indexValue.length; i++)
+				responseField.text += "\ni: " + indexValue[i] + " = <" +  paramValue[i] + ">"
+		}
+	}
 
 	Pane {
 		anchors.fill: parent
@@ -26,7 +32,7 @@ Window {
 	}
 
 	ColumnLayout {
-		spacing: 100
+		spacing: 20
 		width: parent.width
 
 		Status {Layout.alignment: Qt.AlignLeft; Layout.preferredHeight: 50}
@@ -40,19 +46,22 @@ Window {
 				text: "Response:"
 			}
 
-			TextField {
-				id: responseField
-				width: 500
-				placeholderText: "No response received yet"
-				readOnly: true
+
+
+			Button {
+				text: "Clear"
+				onClicked: clearResponse()
 			}
+		}
+		TextArea {
+			id: responseField
+			width: parent.width
+			Layout.fillHeight: true
+			placeholderText: "No response received yet"
+			readOnly: true
+			selectByMouse: true
+			//wrapMode:
 		}
 
 	}
 }
-
-/*##^##
-Designer {
-	D{i:0;formeditorZoom:0.75}
-}
-##^##*/

@@ -1,8 +1,8 @@
 /*!
- * \file gui.h
- * \brief file for the definition of the class "GUI"
- * \author dogadev
- * \date 2022-9-14
+ * \file source/d_test.cpp
+ * \brief file for the definition of the class "DTest"
+ * \author poles
+ * \date 2022-9-7
  *
  * \details
  *
@@ -23,32 +23,44 @@
  *
  ****************************************************************************
  */
-#ifndef GUI_H
-#define GUI_H
 
-#include "d_open_protocol.h"
+
+#ifndef DOPENPROTOCOL_H
+#define DOPENPROTOCOL_H
+
 #include "d_open_protocol_mid.h"
-#include "d_open_protocol_map.h"
-#include <QObject>
-#include <QMap>
 
-class GUI : public QObject
+#include <QObject>
+#include <QtNetwork>
+
+using mid_ptr = std::shared_ptr<DOpenProtocolMid>;
+
+class DOpenProtocol : public QObject
 {
 	Q_OBJECT
+
 public:
-	explicit GUI(QObject *parent = nullptr);
+	DOpenProtocol(QObject * parent = nullptr);
+	bool						doConnect(QString& addr);
 
 public slots:
-	void doConnect();
-	void helloThere();
-	void addParameter();
-	bool sendMid(QString mid, QList<QString> paramValue, QList<int> paramIndex);
+	bool						sendMid(mid_ptr mid); // Send mid and link response if applicable
+
+private slots:
+	void						readMid();
+	void						sendKeepAlive();
+	void						startTimer();
+	void						stopTimer();
+
 signals:
-	void updateResponse(int mid, QList<int> indexValue, QList<QByteArray> paramValue);
-	void connected(bool isConnected);
+	void						connected();
+	void						disconnected();
 
 private:
-	DOpenProtocol dp;
+	QTcpSocket					socket;
+	QTimer						keep_alive_timer;
+	bool						lock_reading;
+	QQueue<mid_ptr>				waiting_response_queue;
 };
 
-#endif // GUI_H
+#endif // DOPENPROTOCOL_H

@@ -70,7 +70,7 @@ ColumnLayout {
 			id: parameterField
 			placeholderText: qsTr("Parameter value")
 			validator: RegularExpressionValidator{
-				regularExpression: /^[1-9]*/
+				regularExpression: /^[0-9]*/
 			}
 		}
 	}

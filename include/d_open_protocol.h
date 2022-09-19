@@ -37,30 +37,31 @@ using mid_ptr = std::shared_ptr<DOpenProtocolMid>;
 
 class DOpenProtocol : public QObject
 {
-	Q_OBJECT
+    Q_OBJECT
 
 public:
-	DOpenProtocol(QObject * parent = nullptr);
-	bool						doConnect(QString& addr);
+    DOpenProtocol(QObject * parent = nullptr);
+    bool						doConnect(QString& addr);
 
 public slots:
-	bool						sendMid(mid_ptr mid); // Send mid and link response if applicable
+    bool						sendMid(mid_ptr mid); // Send mid and link response if applicable
 
 private slots:
-	void						readMid();
-	void						sendKeepAlive();
-	void						startTimer();
-	void						stopTimer();
+    void						readMid();
+    void						sendKeepAlive();
+    void						startTimer();
+    void						stopTimer();
 
 signals:
-	void						connected();
-	void						disconnected();
+    void						connected();
+    void						disconnected();
+    void                        onSubscription(mid_ptr mid);
 
 private:
-	QTcpSocket					socket;
-	QTimer						keep_alive_timer;
-	bool						lock_reading;
-	QQueue<mid_ptr>				waiting_response_queue;
+    QTcpSocket					socket;
+    QTimer						keep_alive_timer;
+    bool						lock_reading;
+    QQueue<mid_ptr>				waiting_response_queue;
 };
 
 #endif // DOPENPROTOCOL_H

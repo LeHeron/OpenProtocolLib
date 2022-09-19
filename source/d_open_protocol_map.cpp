@@ -33,6 +33,14 @@
 #include "mids/d_mid0005.h"
 #include "mids/d_mid0030.h"
 #include "mids/d_mid0031.h"
+#include "mids/d_mid0032.h"
+#include "mids/d_mid0033.h"
+#include "mids/d_mid0034.h"
+#include "mids/d_mid0035.h"
+#include "mids/d_mid0036.h"
+#include "mids/d_mid0037.h"
+#include "mids/d_mid0038.h"
+#include "mids/d_mid0039.h"
 #include "mids/d_mid9999.h"
 
 DOpenProtocolMap* DOpenProtocolMap::m_instance{nullptr};
@@ -40,29 +48,40 @@ std::mutex DOpenProtocolMap::m_mutex;
 
 DOpenProtocolMap::DOpenProtocolMap()
 {
-	mid_constructor_map[DOpenProtocolMid::MID0001] = new DOpenProtocolFactory<DMid0001>();
-	mid_constructor_map[DOpenProtocolMid::MID0002] = new DOpenProtocolFactory<DMid0002>();
-	mid_constructor_map[DOpenProtocolMid::MID0003] = new DOpenProtocolFactory<DMid0003>();
-	mid_constructor_map[DOpenProtocolMid::MID0004] = new DOpenProtocolFactory<DMid0004>();
-	mid_constructor_map[DOpenProtocolMid::MID0005] = new DOpenProtocolFactory<DMid0005>();
+    // Communication
+    mid_constructor_map[DOpenProtocolMid::MID0001] = new DOpenProtocolFactory<DMid0001>();
+    mid_constructor_map[DOpenProtocolMid::MID0002] = new DOpenProtocolFactory<DMid0002>();
+    mid_constructor_map[DOpenProtocolMid::MID0003] = new DOpenProtocolFactory<DMid0003>();
+    mid_constructor_map[DOpenProtocolMid::MID0004] = new DOpenProtocolFactory<DMid0004>();
+    mid_constructor_map[DOpenProtocolMid::MID0005] = new DOpenProtocolFactory<DMid0005>();
 
-	mid_constructor_map[DOpenProtocolMid::MID0030] = new DOpenProtocolFactory<DMid0030>();
-	mid_constructor_map[DOpenProtocolMid::MID0031] = new DOpenProtocolFactory<DMid0031>();
+    // Job
+    mid_constructor_map[DOpenProtocolMid::MID0030] = new DOpenProtocolFactory<DMid0030>();
+    mid_constructor_map[DOpenProtocolMid::MID0031] = new DOpenProtocolFactory<DMid0031>();
+    mid_constructor_map[DOpenProtocolMid::MID0032] = new DOpenProtocolFactory<DMid0032>();
+    mid_constructor_map[DOpenProtocolMid::MID0033] = new DOpenProtocolFactory<DMid0033>();
+    mid_constructor_map[DOpenProtocolMid::MID0034] = new DOpenProtocolFactory<DMid0034>();
+    mid_constructor_map[DOpenProtocolMid::MID0035] = new DOpenProtocolFactory<DMid0035>();
+    mid_constructor_map[DOpenProtocolMid::MID0036] = new DOpenProtocolFactory<DMid0036>();
+    mid_constructor_map[DOpenProtocolMid::MID0037] = new DOpenProtocolFactory<DMid0037>();
+    mid_constructor_map[DOpenProtocolMid::MID0038] = new DOpenProtocolFactory<DMid0038>();
+    mid_constructor_map[DOpenProtocolMid::MID0039] = new DOpenProtocolFactory<DMid0039>();
 
-	mid_constructor_map[DOpenProtocolMid::MID9999] = new DOpenProtocolFactory<DMid9999>();
+    // Keep Alive
+    mid_constructor_map[DOpenProtocolMid::MID9999] = new DOpenProtocolFactory<DMid9999>();
 }
 
 DOpenProtocolMap* DOpenProtocolMap::getInstance()
 {
-	std::lock_guard<std::mutex> lock(m_mutex);
-	if (m_instance == nullptr)
-	{
-		m_instance = new DOpenProtocolMap();
-	}
-	return m_instance;
+    std::lock_guard<std::mutex> lock(m_mutex);
+    if (m_instance == nullptr)
+    {
+        m_instance = new DOpenProtocolMap();
+    }
+    return m_instance;
 }
 
 QMap<DOpenProtocolMid::midType, DOpenProtocolFactoryBase*>& DOpenProtocolMap::getMap()
 {
-	return getInstance()->mid_constructor_map;
+    return getInstance()->mid_constructor_map;
 }

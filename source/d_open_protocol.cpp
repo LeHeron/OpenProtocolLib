@@ -40,83 +40,88 @@
 
 DOpenProtocol::DOpenProtocol(QObject * parent) : QObject(parent)
 {
-	connect(&socket, &QTcpSocket::readyRead, this, &DOpenProtocol::readMid);
-	connect(&socket, &QTcpSocket::disconnected, this, &DOpenProtocol::disconnected);
-	connect(&socket, &QTcpSocket::errorOccurred, this, &DOpenProtocol::disconnected);
+    connect(&socket, &QTcpSocket::readyRead, this, &DOpenProtocol::readMid);
+    connect(&socket, &QTcpSocket::disconnected, this, &DOpenProtocol::disconnected);
+    connect(&socket, &QTcpSocket::errorOccurred, this, &DOpenProtocol::disconnected);
 }
 
 void DOpenProtocol::startTimer() {
-	keep_alive_timer.start(KEEP_ALIVE_TIMEOUT);
+    keep_alive_timer.start(KEEP_ALIVE_TIMEOUT);
 }
 
 void DOpenProtocol::stopTimer() {
-	keep_alive_timer.stop();
+    keep_alive_timer.stop();
 }
 
 
 bool DOpenProtocol::doConnect(QString& addr)
 {
-	qDebug() << "Attempting connection ..." << "\n";
-	socket.connectToHost(addr, PORT);
+    qDebug() << "Attempting connection ..." << "\n";
+    socket.connectToHost(addr, PORT);
 
-	if (socket.waitForConnected(TIMEOUT)) {
-		qDebug() << "Connected, enabling keep alive" << "\n";
-		connect(&keep_alive_timer,	&QTimer::timeout,	this, &DOpenProtocol::sendKeepAlive);
-		keep_alive_timer.start(KEEP_ALIVE_TIMEOUT);
-	}
-	else {
-		qDebug() << "Connection failed !!!!" << "\n";
-		return false;
-	}
+    if (socket.waitForConnected(TIMEOUT)) {
+        qDebug() << "Connected, enabling keep alive" << "\n";
+        connect(&keep_alive_timer,	&QTimer::timeout,	this, &DOpenProtocol::sendKeepAlive);
+        keep_alive_timer.start(KEEP_ALIVE_TIMEOUT);
+    }
+    else {
+        qDebug() << "Connection failed !!!!" << "\n";
+        return false;
+    }
 
-	return true;
+    return true;
 }
 
-void DOpenProtocol::readMid() {
-	startTimer();
-	mid_ptr received_mid = DOpenProtocolMid::decodeMid(socket.read(BUFFER_READ));
+void DOpenProtocol::readMid() { // TODO read multiple MID in buffer
+    startTimer();
+    mid_ptr received_mid = DOpenProtocolMid::decodeMid(socket.read(BUFFER_READ));
 
-	// Checking special signals
-	if (received_mid->mid_ID == 2)
-		emit connected();
-	if (received_mid->mid_ID == 3)
-		emit disconnected(); // TODO send MID0005
+    // Checking special signals
+    if (received_mid->mid_ID == 2)
+        emit connected();
+    if (received_mid->mid_ID == 3)
+    {
+        sendMid(DOpenProtocolMap::getMap()[DOpenProtocolMid::MID0005]->createMid({}));
+        emit disconnected();
+    }
 
-	// Assigning response
-	for (auto it = waiting_response_queue.begin(); it != waiting_response_queue.end(); it++) {
+    // Assigning response
+    for (auto it = waiting_response_queue.begin(); it != waiting_response_queue.end(); it++) {
 
-		QVector<DOpenProtocolMid::midType>* valid_responses = (*it)->getValidResponses();
-		if (valid_responses->contains(received_mid->mid_ID)) { // Response of former request
-			(*it)->setResponse(received_mid);
-			waiting_response_queue.erase(it);
-			break;
-		}
-	}
+        QVector<DOpenProtocolMid::midType>* valid_responses = (*it)->getValidResponses();
+        if (valid_responses->contains(received_mid->mid_ID)) { // Response of former request
+            (*it)->setResponse(received_mid);
+            waiting_response_queue.erase(it);
+            return;
+        }
+    }
 
+    // No response found -> subscription
+    emit onSubscription(received_mid);
 }
 
 
 bool DOpenProtocol::sendMid(mid_ptr mid)
 {
-	if (socket.state() != QAbstractSocket::ConnectedState) {
-		qDebug() << "Cannot reach target" << "\n";
-		stopTimer();
-		return false;
-	}
+    if (socket.state() != QAbstractSocket::ConnectedState) {
+        qDebug() << "Cannot reach target" << "\n";
+        stopTimer();
+        return false;
+    }
 
-	//qDebug().nospace() << "Sending frame <" << mid->toQString() << ">\n";
+    qDebug().nospace() << "Sending frame <" << mid->toQByteArray() << ">\n";
 
-	if (socket.write(mid->toQByteArray()) != -1 && socket.waitForBytesWritten(TIMEOUT))
-	{
-		waiting_response_queue.enqueue(mid);
-		return true;
-	}
+    if (socket.write(mid->toQByteArray()) != -1 && socket.waitForBytesWritten(TIMEOUT))
+    {
+        waiting_response_queue.enqueue(mid);
+        return true;
+    }
 
-	emit disconnected();
-	return false;
+    emit disconnected();
+    return false;
 }
 
 void DOpenProtocol::sendKeepAlive() {
-	std::shared_ptr<DOpenProtocolMid> mid_to_send = std::make_shared<DMid9999>(QString("00209999            "));
-	sendMid(mid_to_send);
+    std::shared_ptr<DOpenProtocolMid> mid_to_send = std::make_shared<DMid9999>(QString("00209999            "));
+    sendMid(mid_to_send);
 }

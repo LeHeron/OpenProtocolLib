@@ -34,21 +34,24 @@
 
 class GUI : public QObject
 {
-	Q_OBJECT
+    Q_OBJECT
 public:
-	explicit GUI(QObject *parent = nullptr);
+    explicit GUI(QObject *parent = nullptr);
 
 public slots:
-	void doConnect();
-	void helloThere();
-	void addParameter();
-	bool sendMid(QString mid, QList<QString> paramValue, QList<int> paramIndex);
+    void doConnect();
+    void helloThere();
+    void addParameter();
+    bool sendMid(QString mid, QList<QString> paramValue, QList<int> paramIndex);
+    void bindSubscription(mid_ptr sub);
+
 signals:
-	void updateResponse(int mid, QList<int> indexValue, QList<QByteArray> paramValue);
-	void connected(bool isConnected);
+    void receivedSubscription(int mid, QList<int> indexValue, QVariantList paramValue);
+    void updateResponse(int mid, QList<int> indexValue, QVariantList paramValue);
+    void connected(bool isConnected);
 
 private:
-	DOpenProtocol dp;
+    DOpenProtocol dp;
 };
 
 #endif // GUI_H

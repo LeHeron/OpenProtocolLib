@@ -40,67 +40,75 @@ using mid_ptr = std::shared_ptr<DOpenProtocolMid>;
 
 class DOpenProtocolMid : public QObject
 {
-	Q_OBJECT
+    Q_OBJECT
 
 public:
-	// Enum items value must be equal to its id (i.e. MID0472 = 472)
-	enum midType {
-		MID0001 = 1,
-		MID0002,
-		MID0003,
-		MID0004,
-		MID0005,
-		MID0030 = 30,
-		MID0031,
-		MID9999 = 9999
-	};
+    // Enum items value must be equal to its id (i.e. MID0472 = 472)
+    enum midType {
+        MID0001 = 1,
+        MID0002,
+        MID0003,
+        MID0004,
+        MID0005,
+        MID0030 = 30,
+        MID0031,
+        MID0032,
+        MID0033,
+        MID0034,
+        MID0035,
+        MID0036,
+        MID0037,
+        MID0038,
+        MID0039,
+        MID9999 = 9999
+    };
 
-	// Ctor
-	explicit					DOpenProtocolMid(QByteArray);
-	explicit					DOpenProtocolMid(QString);
-	explicit					DOpenProtocolMid(QMap<int, QByteArray> args);
+    // Ctor
+    explicit					DOpenProtocolMid(QByteArray);
+    explicit					DOpenProtocolMid(QString);
+    explicit					DOpenProtocolMid(QMap<int, QByteArray> args);
 
-	static mid_ptr				decodeMid(QByteArray&& arr);
+    static mid_ptr				decodeMid(QByteArray&& arr);
 
-	QString						toQString()										const;
-	QByteArray					toQByteArray()									const;
+    QString						toQString()										const;
+    QByteArray					toQByteArray()									const;
 
 
 protected:
-	explicit					DOpenProtocolMid() {} // Needed for subclass Ctor
+    explicit					DOpenProtocolMid() {} // Needed for subclass Ctor
 
-	virtual void				processData(QByteArray data_byte_array)			= 0;
-	int							getDataFieldsLength();
-	static QString				formatNumber(int n, int digits);
+    virtual void				processData(QByteArray data_byte_array)			= 0;
+    int							getDataFieldsLength();
+    static QString				formatNumber(int n, int digits);
 
-	struct DOpenProtocolHeader
-	{
-		explicit DOpenProtocolHeader(QByteArray arr); // TODO Avoid copy
-		explicit DOpenProtocolHeader(QString str);
+    struct DOpenProtocolHeader
+    {
+        explicit DOpenProtocolHeader(QByteArray arr); // TODO Avoid copy
+        explicit DOpenProtocolHeader(QString str);
 
-		int		length;
-		int		mid;
-		int		revision;
-		bool	no_ack_flag;
-		int		stationID;
-		int		spindelID;
-	};
+        int		length;
+        int		mid;
+        int		revision;
+        bool	no_ack_flag;
+        int		stationID;
+        int		spindelID;
+    };
 
 public:
-	midType									mid_ID;
-	void									setResponse(std::shared_ptr<DOpenProtocolMid>);
-	const mid_ptr							getResponse() const;
-	QVector<midType>*						getValidResponses();
-	QMap<int, QByteArray>					getDataFields();
+    midType									mid_ID;
+    void									setResponse(std::shared_ptr<DOpenProtocolMid>);
+    const mid_ptr							getResponse() const;
+    QVector<midType>*						getValidResponses();
+    const QMap<int, QByteArray>&					getDataFields() const;
 
 protected:
-	std::shared_ptr<DOpenProtocolHeader>	header;
-	QMap<int, QByteArray>					data_fields; // Use negative key to prevent adding parameter number prefix
-	QVector<midType>						valid_responses;
-	mid_ptr									response;
+    std::shared_ptr<DOpenProtocolHeader>	header;
+    QMap<int, QByteArray>					data_fields; // Use negative key to prevent adding parameter number prefix
+    QVector<midType>						valid_responses;
+    mid_ptr									response;
 
 signals:
-	void									onResponse();
+    void									onResponse();
 };
 
 #endif // D_OPEN_PROTOCOL_MID_H

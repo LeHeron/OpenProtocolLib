@@ -30,6 +30,14 @@ set(PROJECT_SOURCES
 		mids/d_mid0005.cpp
 		mids/d_mid0030.cpp
 		mids/d_mid0031.cpp
+		mids/d_mid0032.cpp
+		mids/d_mid0033.cpp
+		mids/d_mid0034.cpp
+		mids/d_mid0035.cpp
+		mids/d_mid0036.cpp
+		mids/d_mid0037.cpp
+		mids/d_mid0038.cpp
+		mids/d_mid0039.cpp
 		mids/d_mid9999.cpp
 		#test_connection.cpp
 )
@@ -47,6 +55,14 @@ set(PROJECT_HEADERS
 	mids/d_mid0005.h
 	mids/d_mid0030.h
 	mids/d_mid0031.h
+	mids/d_mid0032.h
+	mids/d_mid0033.h
+	mids/d_mid0034.h
+	mids/d_mid0035.h
+	mids/d_mid0036.h
+	mids/d_mid0037.h
+	mids/d_mid0038.h
+	mids/d_mid0039.h
 	mids/d_mid9999.h
 	#test_connection.h
 )

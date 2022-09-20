@@ -34,6 +34,7 @@ public:
     explicit	DMid0034(QByteArray arr);
     explicit	DMid0034(QString str)		: DMid0034(str.toUtf8()) {}
     explicit	DMid0034(QMap<int, QByteArray> args);
+    explicit	DMid0034(int revision, QMap<int, QByteArray> args);
 
 protected:
     void processData(QByteArray data_byte_array) override;

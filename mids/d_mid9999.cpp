@@ -32,21 +32,26 @@ void DMid9999::processData(QByteArray data_byte_array) {
 }
 
 DMid9999::DMid9999(QByteArray arr)
-	: DOpenProtocolMid(arr)
+    : DOpenProtocolMid(arr)
 {
-	DMid9999::processData(arr.mid(20, -1));
-	REGISTER_RESPONSES();
+    DMid9999::processData(arr.mid(20, -1));
+    REGISTER_RESPONSES();
 }
 
-DMid9999::DMid9999(QMap<int, QByteArray> args)
+DMid9999::DMid9999(QMap<int, QByteArray> args) : DMid9999(-1, args)
+{}
+
+DMid9999::DMid9999(int revision, QMap<int, QByteArray> args)
 {
-	data_fields = args;
-	QString header_str = formatNumber(getDataFieldsLength() + 20, 4);
-	header_str += "9999   0000     ";
+    data_fields = args;
+    QString header_str = formatNumber(getDataFieldsLength() + 20, 4);
+    header_str += "9999";
+    header_str += revision < 0 ? "   " : formatNumber(revision, 3);
+    header_str += "0000     ";
 
-	header = std::make_shared<DOpenProtocolHeader>(header_str);
-	REGISTER_RESPONSES();
+    header = std::make_shared<DOpenProtocolHeader>(header_str);
+    REGISTER_RESPONSES();
 
-	// Assign MID enum from its ID
-	mid_ID = static_cast<midType>(header->mid);
+    // Assign MID enum from its ID
+    mid_ID = static_cast<midType>(header->mid);
 }

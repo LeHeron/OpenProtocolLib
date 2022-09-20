@@ -39,11 +39,16 @@ DMid0032::DMid0032(QByteArray arr)
     REGISTER_RESPONSES();
 }
 
-DMid0032::DMid0032(QMap<int, QByteArray> args)
+DMid0032::DMid0032(QMap<int, QByteArray> args) : DMid0032(-1, args)
+{}
+
+DMid0032::DMid0032(int revision, QMap<int, QByteArray> args)
 {
     data_fields = args;
     QString header_str = formatNumber(getDataFieldsLength() + 20, 4);
-    header_str += "00320010000     ";
+    header_str += "0032";
+    header_str += revision < 0 ? "001" : formatNumber(revision, 3);
+    header_str += "0000     ";
 
     header = std::make_shared<DOpenProtocolHeader>(header_str);
     REGISTER_RESPONSES();

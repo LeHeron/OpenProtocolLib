@@ -33,15 +33,20 @@ template <typename T>
 class DOpenProtocolFactory : public DOpenProtocolFactoryBase
 {
 public:
-	std::shared_ptr<DOpenProtocolMid> createMid(QString& str) const {
-		return std::make_shared<T>(str);
-	}
-	std::shared_ptr<DOpenProtocolMid> createMid(QByteArray& arr) const {
-		return std::make_shared<T>(arr);
-	}
-	std::shared_ptr<DOpenProtocolMid> createMid(QMap<int, QByteArray> args) const {
-		return std::make_shared<T>(args);
-	}
+    std::shared_ptr<DOpenProtocolMid> createMid(QString& str) const {
+        return std::make_shared<T>(str);
+    }
+    std::shared_ptr<DOpenProtocolMid> createMid(QByteArray& arr) const {
+        return std::make_shared<T>(arr);
+    }
+    std::shared_ptr<DOpenProtocolMid> createMid(QMap<int, QByteArray> args) const {
+        return std::make_shared<T>(args);
+    }
+
+    std::shared_ptr<DOpenProtocolMid> createMid(int revision, QMap<int, QByteArray> args) const {
+        return std::make_shared<T>(revision, args);
+    }
+
 };
 
 #endif // DOPENPROTOCOLFACTORY_H

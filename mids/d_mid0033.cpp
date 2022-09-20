@@ -38,12 +38,12 @@ void DMid0033::processData(QByteArray data_byte_array)
     data_fields.insert(7, data_byte_array.mid(52, 1)); // Lock at Job done
     data_fields.insert(8, data_byte_array.mid(55, 1)); // Use line control
     data_fields.insert(9, data_byte_array.mid(58, 1)); // Repeat Job
-    data_fields.insert(10, data_byte_array.mid(61, 2)); // Tool loosening
-    data_fields.insert(11, data_byte_array.mid(66, 1)); // Reserved
-    data_fields.insert(12, data_byte_array.mid(69, 2)); // Number of set
+    data_fields.insert(10, data_byte_array.mid(61, 1)); // Tool loosening
+    data_fields.insert(11, data_byte_array.mid(64, 1)); // Reserved
+    data_fields.insert(12, data_byte_array.mid(67, 2)); // Number of set
 
     int paramNumber = 12 * data_fields[12].toInt();
-    data_fields.insert(13, data_byte_array.mid(72, paramNumber)); // Job list
+    data_fields.insert(13, data_byte_array.mid(71, paramNumber)); // Job list
 }
 
 DMid0033::DMid0033(QByteArray arr)
@@ -53,11 +53,16 @@ DMid0033::DMid0033(QByteArray arr)
     REGISTER_RESPONSES();
 }
 
-DMid0033::DMid0033(QMap<int, QByteArray> args)
+DMid0033::DMid0033(QMap<int, QByteArray> args) : DMid0033(-1, args)
+{}
+
+DMid0033::DMid0033(int revision, QMap<int, QByteArray> args)
 {
     data_fields = args;
     QString header_str = formatNumber(getDataFieldsLength() + 20, 4);
-    header_str += "0033   0000     ";
+    header_str += "0033";
+    header_str += revision < 0 ? "   " : formatNumber(revision, 3);
+    header_str += "0000     ";
 
     header = std::make_shared<DOpenProtocolHeader>(header_str);
     REGISTER_RESPONSES();

@@ -67,6 +67,7 @@ public:
     explicit					DOpenProtocolMid(QByteArray);
     explicit					DOpenProtocolMid(QString);
     explicit					DOpenProtocolMid(QMap<int, QByteArray> args);
+    explicit					DOpenProtocolMid(int revision, QMap<int, QByteArray> args);
 
     static mid_ptr				decodeMid(QByteArray&& arr);
 

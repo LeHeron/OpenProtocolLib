@@ -32,9 +32,10 @@ class DOpenProtocolMid;
 class DOpenProtocolFactoryBase
 {
 public:
-	virtual std::shared_ptr<DOpenProtocolMid> createMid(QString&) const = 0;
-	virtual std::shared_ptr<DOpenProtocolMid> createMid(QByteArray&) const = 0;
-	virtual std::shared_ptr<DOpenProtocolMid> createMid(QMap<int, QByteArray> args) const = 0;
+    virtual std::shared_ptr<DOpenProtocolMid> createMid(QString&) const = 0;
+    virtual std::shared_ptr<DOpenProtocolMid> createMid(QByteArray&) const = 0;
+    virtual std::shared_ptr<DOpenProtocolMid> createMid(QMap<int, QByteArray> args) const = 0;
+    virtual std::shared_ptr<DOpenProtocolMid> createMid(int revision, QMap<int, QByteArray> args) const = 0;
 };
 
 #endif // DOPENPROTOCOLFACTORYBASE_H

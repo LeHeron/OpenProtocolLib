@@ -35,10 +35,11 @@
 #include <mutex>
 
 #include "d_open_protocol_factory.h"
+#include "lib_open_protocol_global.h"
 
 using mid_ptr = std::shared_ptr<DOpenProtocolMid>;
 
-class DOpenProtocolMid : public QObject
+class LIB_OPEN_PROTOCOL_EXPORT DOpenProtocolMid : public QObject
 {
     Q_OBJECT
 
@@ -100,7 +101,7 @@ public:
     void									setResponse(std::shared_ptr<DOpenProtocolMid>);
     const mid_ptr							getResponse() const;
     QVector<midType>*						getValidResponses();
-    const QMap<int, QByteArray>&					getDataFields() const;
+    const QMap<int, QByteArray>&			getDataFields() const;
 
 protected:
     std::shared_ptr<DOpenProtocolHeader>	header;

@@ -70,7 +70,7 @@ bool GUI::sendMid(QString mid, QList<QString> paramValue, QList<int> paramIndex)
         QVariantList paramValue;
 
         QMap<int, QByteArray> dataFields = midObj->getResponse()->getDataFields();
-        for (auto e : dataFields.keys()) {
+        for (auto& e : dataFields.keys()) {
             indexValue.append(e);
             paramValue.append(dataFields[e]);
         }
@@ -94,7 +94,7 @@ void GUI::bindSubscription(mid_ptr sub) {
     QVariantList paramValue;
 
     QMap<int, QByteArray> dataFields = sub->getDataFields();
-    for (auto e : sub->getDataFields().keys()) {
+    for (auto& e : sub->getDataFields().keys()) {
         indexValue.append(e);
         paramValue.append(dataFields[e]);
     }

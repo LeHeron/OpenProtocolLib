@@ -27,9 +27,11 @@
 #define DOPENPROTOCOLFACTORYBASE_H
 
 #include "d_open_protocol_mid.h"
+#include "lib_open_protocol_global.h"
+
 class DOpenProtocolMid;
 
-class DOpenProtocolFactoryBase
+class LIB_OPEN_PROTOCOL_EXPORT DOpenProtocolFactoryBase
 {
 public:
     virtual std::shared_ptr<DOpenProtocolMid> createMid(QString&) const = 0;

@@ -34,7 +34,6 @@
 #include <cmath>
 
 #define TIMEOUT 3000
-#define PORT 4545
 #define KEEP_ALIVE_TIMEOUT 13000
 #define BUFFER_READ 1024
 
@@ -54,10 +53,10 @@ void DOpenProtocol::stopTimer() {
 }
 
 
-bool DOpenProtocol::doConnect(QString& addr)
+bool DOpenProtocol::doConnect(QString& addr, int port)
 {
     qDebug() << "Attempting connection ..." << "\n";
-    socket.connectToHost(addr, PORT);
+    socket.connectToHost(addr, port);
 
     if (socket.waitForConnected(TIMEOUT)) {
         qDebug() << "Connected, enabling keep alive" << "\n";

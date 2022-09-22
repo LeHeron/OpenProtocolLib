@@ -29,19 +29,22 @@
 #define DOPENPROTOCOL_H
 
 #include "d_open_protocol_mid.h"
+#include "lib_open_protocol_global.h"
 
 #include <QObject>
 #include <QtNetwork>
 
+#define DEFAULT_PORT 4545
+
 using mid_ptr = std::shared_ptr<DOpenProtocolMid>;
 
-class DOpenProtocol : public QObject
+class LIB_OPEN_PROTOCOL_EXPORT DOpenProtocol : public QObject
 {
     Q_OBJECT
 
 public:
-    DOpenProtocol(QObject * parent = nullptr);
-    bool						doConnect(QString& addr);
+    DOpenProtocol               (QObject * parent = nullptr);
+    bool						doConnect(QString& addr, int port = DEFAULT_PORT);
 
 public slots:
     bool						sendMid(mid_ptr mid); // Send mid and link response if applicable

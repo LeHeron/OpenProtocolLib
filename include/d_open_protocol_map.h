@@ -31,8 +31,9 @@
 #include "d_open_protocol_mid.h"
 #include "include/d_open_protocol_factory.h"
 #include "include/d_open_protocol_factory_base.h"
+#include "lib_open_protocol_global.h"
 
-class DOpenProtocolMap
+class LIB_OPEN_PROTOCOL_EXPORT DOpenProtocolMap
 {
 	// Singleton properties
 	// ======>

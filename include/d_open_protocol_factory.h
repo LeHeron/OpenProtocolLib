@@ -28,9 +28,10 @@
 
 #include <memory>
 #include "d_open_protocol_factory_base.h"
+#include "lib_open_protocol_global.h"
 
 template <typename T>
-class DOpenProtocolFactory : public DOpenProtocolFactoryBase
+class LIB_OPEN_PROTOCOL_EXPORT DOpenProtocolFactory : public DOpenProtocolFactoryBase
 {
 public:
     std::shared_ptr<DOpenProtocolMid> createMid(QString& str) const {

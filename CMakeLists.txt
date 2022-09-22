@@ -64,7 +64,8 @@ set(PROJECT_HEADERS
 	mids/d_mid0038.h
 	mids/d_mid0039.h
 	mids/d_mid9999.h
-	#test_connection.h
+
+	include/lib_open_protocol_global.h
 )
 
 if(${QT_VERSION_MAJOR} GREATER_EQUAL 6)

@@ -34,7 +34,7 @@
 int DOpenProtocolMid::getDataFieldsLength()
 {
     int length = 0;
-    for (auto e : data_fields.keys()) {
+    for (auto& e : data_fields.keys()) {
         if (e > 0)
             length += 2;
 
@@ -71,7 +71,7 @@ QString DOpenProtocolMid::toQString() const
 {
     QString data("");
 
-    for (auto e : data_fields.keys()) {
+    for (auto& e : data_fields.keys()) {
         if (e > 0)
             data += formatNumber(e, 2);
          data += QString(data_fields[e]);
@@ -119,7 +119,7 @@ QByteArray DOpenProtocolMid::toQByteArray() const
     appendToArray(message, header->spindelID, 2);
     message.append("     "); // 5 spaces for reserved space
 
-    for (auto e : data_fields.keys()) {
+    for (auto& e : data_fields.keys()) {
         if (e > 0)
             appendToArray(message, e, 2);
          message.append(data_fields[e]);

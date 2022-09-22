@@ -67,8 +67,9 @@ public:
     // Ctor
     explicit					DOpenProtocolMid(QByteArray);
     explicit					DOpenProtocolMid(QString);
-    explicit					DOpenProtocolMid(QMap<int, QByteArray> args);
-    explicit					DOpenProtocolMid(int revision, QMap<int, QByteArray> args);
+    explicit					DOpenProtocolMid(QMap<int, QByteArray> args, int spindle_id = 1);
+    explicit					DOpenProtocolMid(int revision, QMap<int, QByteArray> args, int spindle_id = 1);
+    explicit					DOpenProtocolMid(int revision, QMap<int, QByteArray> args, int spindle_id, int station_id);
 
     static mid_ptr				decodeMid(QByteArray&& arr);
 

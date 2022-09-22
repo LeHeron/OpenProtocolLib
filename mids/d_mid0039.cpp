@@ -39,16 +39,23 @@ DMid0039::DMid0039(QByteArray arr)
     REGISTER_RESPONSES();
 }
 
-DMid0039::DMid0039(QMap<int, QByteArray> args) : DMid0039(-1, args)
+DMid0039::DMid0039(QMap<int, QByteArray> args, int spindle_id) : DMid0039(-1, args, spindle_id)
 {}
 
-DMid0039::DMid0039(int revision, QMap<int, QByteArray> args)
+DMid0039::DMid0039(int revision, QMap<int, QByteArray> args, int spindle_id)
+    : DMid0039(revision, args, spindle_id, 1)
+{}
+
+DMid0039::DMid0039(int revision, QMap<int, QByteArray> args, int spindle_id, int station_id)
 {
     data_fields = args;
     QString header_str = formatNumber(getDataFieldsLength() + 20, 4);
     header_str += "0039";
     header_str += revision < 0 ? "   " : formatNumber(revision, 3);
-    header_str += "0000     ";
+    header_str += '0'; // No ack flag
+    header_str += formatNumber(station_id, 1); // Station ID
+    header_str += formatNumber(spindle_id, 2); // spindle_id
+    header_str += "     "; // 5 space reserved
 
     header = std::make_shared<DOpenProtocolHeader>(header_str);
     REGISTER_RESPONSES();

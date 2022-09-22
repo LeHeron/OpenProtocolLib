@@ -34,8 +34,9 @@ class DMid0031 : public DOpenProtocolMid
 public:
     explicit	DMid0031(QByteArray arr);
     explicit	DMid0031(QString str)		: DMid0031(str.toUtf8()) {}
-    explicit	DMid0031(QMap<int, QByteArray> args);
-    explicit	DMid0031(int revision, QMap<int, QByteArray> args);
+    explicit	DMid0031(QMap<int, QByteArray> args, int spindle_id = 1);
+    explicit	DMid0031(int revision, QMap<int, QByteArray> args, int spindle_id = 1);
+    explicit    DMid0031(int revision, QMap<int, QByteArray> args, int spindle_id, int station_id);
 
 protected:
     void processData(QByteArray data_byte_array) override;

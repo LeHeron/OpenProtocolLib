@@ -38,16 +38,23 @@ DMid0005::DMid0005(QByteArray arr)
     DMid0005::processData(arr.mid(20, -1));
 }
 
-DMid0005::DMid0005(QMap<int, QByteArray> args) : DMid0005(-1, args)
+DMid0005::DMid0005(QMap<int, QByteArray> args, int spindle_id) : DMid0005(-1, args, spindle_id)
 {}
 
-DMid0005::DMid0005(int revision, QMap<int, QByteArray> args)
+DMid0005::DMid0005(int revision, QMap<int, QByteArray> args, int spindle_id)
+    : DMid0005(revision, args, spindle_id, 1)
+{}
+
+DMid0005::DMid0005(int revision, QMap<int, QByteArray> args, int spindle_id, int station_id)
 {
     data_fields = args;
     QString header_str = formatNumber(getDataFieldsLength() + 20, 4);
     header_str += "0005";
     header_str += revision < 0 ? "   " : formatNumber(revision, 3);
-    header_str += "0000     ";
+    header_str += '0'; // No ack flag
+    header_str += formatNumber(station_id, 1); // Station ID
+    header_str += formatNumber(spindle_id, 2); // spindle_id
+    header_str += "     "; // 5 space reserved
 
     header = std::make_shared<DOpenProtocolHeader>(header_str);
 

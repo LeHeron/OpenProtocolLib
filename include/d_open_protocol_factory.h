@@ -40,12 +40,16 @@ public:
     std::shared_ptr<DOpenProtocolMid> createMid(QByteArray& arr) const {
         return std::make_shared<T>(arr);
     }
-    std::shared_ptr<DOpenProtocolMid> createMid(QMap<int, QByteArray> args) const {
-        return std::make_shared<T>(args);
+    std::shared_ptr<DOpenProtocolMid> createMid(QMap<int, QByteArray> args, int spindle_id = 1) const {
+        return std::make_shared<T>(args, spindle_id);
     }
 
-    std::shared_ptr<DOpenProtocolMid> createMid(int revision, QMap<int, QByteArray> args) const {
-        return std::make_shared<T>(revision, args);
+    std::shared_ptr<DOpenProtocolMid> createMid(int revision, QMap<int, QByteArray> args, int spindle_id = 1) const {
+        return std::make_shared<T>(revision, args, spindle_id);
+    }
+
+    std::shared_ptr<DOpenProtocolMid> createMid(int revision, QMap<int, QByteArray> args, int spindle_id, int station_id) const {
+        return std::make_shared<T>(revision, args, spindle_id, station_id);
     }
 
 };

@@ -36,8 +36,9 @@ class LIB_OPEN_PROTOCOL_EXPORT DOpenProtocolFactoryBase
 public:
     virtual std::shared_ptr<DOpenProtocolMid> createMid(QString&) const = 0;
     virtual std::shared_ptr<DOpenProtocolMid> createMid(QByteArray&) const = 0;
-    virtual std::shared_ptr<DOpenProtocolMid> createMid(QMap<int, QByteArray> args) const = 0;
-    virtual std::shared_ptr<DOpenProtocolMid> createMid(int revision, QMap<int, QByteArray> args) const = 0;
+    virtual std::shared_ptr<DOpenProtocolMid> createMid(QMap<int, QByteArray> args, int spindle_id = 1) const = 0;
+    virtual std::shared_ptr<DOpenProtocolMid> createMid(int revision, QMap<int, QByteArray> args, int spindle_id = 1) const = 0;
+    virtual std::shared_ptr<DOpenProtocolMid> createMid(int revision, QMap<int, QByteArray> args, int spindle_id, int station_id) const = 0;
 };
 
 #endif // DOPENPROTOCOLFACTORYBASE_H

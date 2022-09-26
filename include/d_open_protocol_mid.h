@@ -52,7 +52,9 @@ public:
         MID0004,
         MID0005,
 
-        MID0012 = 12,
+        MID0010 = 10,
+        MID0011,
+        MID0012,
         MID0013,
         MID0018 = 18,
 

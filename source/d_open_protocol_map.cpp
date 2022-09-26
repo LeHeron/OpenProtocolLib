@@ -31,6 +31,8 @@
 #include "mids/d_mid0003.h"
 #include "mids/d_mid0004.h"
 #include "mids/d_mid0005.h"
+#include "mids/d_mid0010.h"
+#include "mids/d_mid0011.h"
 #include "mids/d_mid0012.h"
 #include "mids/d_mid0013.h"
 #include "mids/d_mid0018.h"
@@ -67,6 +69,8 @@ DOpenProtocolMap::DOpenProtocolMap()
     mid_constructor_map[DOpenProtocolMid::MID0005] = new DOpenProtocolFactory<DMid0005>();
 
     // Parameter set
+    mid_constructor_map[DOpenProtocolMid::MID0010] = new DOpenProtocolFactory<DMid0010>();
+    mid_constructor_map[DOpenProtocolMid::MID0011] = new DOpenProtocolFactory<DMid0011>();
     mid_constructor_map[DOpenProtocolMid::MID0012] = new DOpenProtocolFactory<DMid0012>();
     mid_constructor_map[DOpenProtocolMid::MID0013] = new DOpenProtocolFactory<DMid0013>();
     mid_constructor_map[DOpenProtocolMid::MID0018] = new DOpenProtocolFactory<DMid0018>();

@@ -29,6 +29,8 @@ set(PROJECT_SOURCES
 		mids/d_mid0004.cpp
 		mids/d_mid0005.cpp
 
+		mids/d_mid0010.cpp
+		mids/d_mid0011.cpp
 		mids/d_mid0012.cpp
 		mids/d_mid0013.cpp
 		mids/d_mid0018.cpp
@@ -70,6 +72,8 @@ set(PROJECT_HEADERS
 	mids/d_mid0004.h
 	mids/d_mid0005.h
 
+	mids/d_mid0010.h
+	mids/d_mid0011.h
 	mids/d_mid0012.h
 	mids/d_mid0013.h
 	mids/d_mid0018.h

@@ -51,6 +51,11 @@ public:
         MID0003,
         MID0004,
         MID0005,
+
+        MID0012 = 12,
+        MID0013,
+        MID0018 = 18,
+
         MID0030 = 30,
         MID0031,
         MID0032,
@@ -61,6 +66,17 @@ public:
         MID0037,
         MID0038,
         MID0039,
+
+        MID0040,
+        MID0041,
+        MID0042,
+        MID0043,
+
+        MID0060 = 60,
+        MID0061,
+        MID0062,
+        MID0063,
+
         MID9999 = 9999
     };
 

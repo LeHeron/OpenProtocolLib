@@ -1,8 +1,8 @@
 /*!
- * \file d_mid0038.cpp
- * \brief file for the definition of the class "DMid0038"
+ * \file d_mid0040.cpp
+ * \brief file for the definition of the class "DMid0040"
  * \author poles
- * \date 2022-9-16
+ * \date 2022-09-23
  *
  * \details
  *
@@ -23,38 +23,35 @@
  *
  ****************************************************************************
  */
-#include "d_mid0038.h"
 
-#define REGISTER_RESPONSES() valid_responses.append({MID0004, MID0005})
+#include "mids/d_mid0040.h"
 
-void DMid0038::processData(QByteArray data_byte_array)
+#define REGISTER_RESPONSES() valid_responses.append({MID0041})
+
+void DMid0040::processData(QByteArray data_byte_array)
 {
-    if (header->revision <= 1)
-        data_fields.insert(0, data_byte_array.mid(0, 2));
 
-   if (header->revision == 2)
-       data_fields.insert(0, data_byte_array.mid(0, 4));
 }
 
-DMid0038::DMid0038(QByteArray arr)
+DMid0040::DMid0040(QByteArray arr)
     : DOpenProtocolMid(arr)
 {
-    DMid0038::processData(arr.mid(20, -1));
+    DMid0040::processData(arr.mid(20, -1));
     REGISTER_RESPONSES();
 }
 
-DMid0038::DMid0038(QMap<int, QByteArray> args, int spindle_id) : DMid0038(-1, args, spindle_id)
+DMid0040::DMid0040(QMap<int, QByteArray> args, int spindle_id) : DMid0040(-1, args, spindle_id)
 {}
 
-DMid0038::DMid0038(int revision, QMap<int, QByteArray> args, int spindle_id)
-    : DMid0038(revision, args, spindle_id, 1)
+DMid0040::DMid0040(int revision, QMap<int, QByteArray> args, int spindle_id)
+    : DMid0040(revision, args, spindle_id, 1)
 {}
 
-DMid0038::DMid0038(int revision, QMap<int, QByteArray> args, int spindle_id, int station_id)
+DMid0040::DMid0040(int revision, QMap<int, QByteArray> args, int spindle_id, int station_id)
 {
     data_fields = args;
     QString header_str = formatNumber(getDataFieldsLength() + 20, 4);
-    header_str += "0038";
+    header_str += "0040";
     header_str += revision < 0 ? "   " : formatNumber(revision, 3);
     header_str += '0'; // No ack flag
     header_str += formatNumber(station_id, 1); // Station ID

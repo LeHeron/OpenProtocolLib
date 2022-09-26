@@ -28,6 +28,11 @@ set(PROJECT_SOURCES
 		mids/d_mid0003.cpp
 		mids/d_mid0004.cpp
 		mids/d_mid0005.cpp
+
+		mids/d_mid0012.cpp
+		mids/d_mid0013.cpp
+		mids/d_mid0018.cpp
+
 		mids/d_mid0030.cpp
 		mids/d_mid0031.cpp
 		mids/d_mid0032.cpp
@@ -38,6 +43,17 @@ set(PROJECT_SOURCES
 		mids/d_mid0037.cpp
 		mids/d_mid0038.cpp
 		mids/d_mid0039.cpp
+
+		mids/d_mid0040.cpp
+		mids/d_mid0041.cpp
+		mids/d_mid0042.cpp
+		mids/d_mid0043.cpp
+
+		mids/d_mid0060.cpp
+		mids/d_mid0061.cpp
+		mids/d_mid0062.cpp
+		mids/d_mid0063.cpp
+
 		mids/d_mid9999.cpp
 		#test_connection.cpp
 )
@@ -53,6 +69,11 @@ set(PROJECT_HEADERS
 	mids/d_mid0003.h
 	mids/d_mid0004.h
 	mids/d_mid0005.h
+
+	mids/d_mid0012.h
+	mids/d_mid0013.h
+	mids/d_mid0018.h
+
 	mids/d_mid0030.h
 	mids/d_mid0031.h
 	mids/d_mid0032.h
@@ -63,6 +84,17 @@ set(PROJECT_HEADERS
 	mids/d_mid0037.h
 	mids/d_mid0038.h
 	mids/d_mid0039.h
+
+	mids/d_mid0040.h
+	mids/d_mid0041.h
+	mids/d_mid0042.h
+	mids/d_mid0043.h
+
+	mids/d_mid0060.h
+	mids/d_mid0061.h
+	mids/d_mid0062.h
+	mids/d_mid0063.h
+
 	mids/d_mid9999.h
 
 	include/lib_open_protocol_global.h

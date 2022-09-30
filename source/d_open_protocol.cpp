@@ -61,13 +61,15 @@ bool DOpenProtocol::doConnect(QString& addr, int port)
     if (socket.waitForConnected(TIMEOUT)) {
         mid_ptr initMid = DOpenProtocolMap::getMap()[DOpenProtocolMid::MID0001]->createMid({});
         connect(initMid.get(), &DOpenProtocolMid::onResponse, this, [this, initMid](){
-            if (initMid->getResponse()->mid_ID == 2)
+            if (initMid->getResponse()->mid_ID == 2) {
                 emit connected();
+                qDebug() << "Connected, enabling keep alive" << "\n";
+                connect(&keep_alive_timer,	&QTimer::timeout,	this, &DOpenProtocol::sendKeepAlive);
+                keep_alive_timer.start(KEEP_ALIVE_TIMEOUT);
+            }
         });
 
-        qDebug() << "Connected, enabling keep alive" << "\n";
-        connect(&keep_alive_timer,	&QTimer::timeout,	this, &DOpenProtocol::sendKeepAlive);
-        keep_alive_timer.start(KEEP_ALIVE_TIMEOUT);
+        sendMid(initMid);
     }
     else {
         qDebug() << "Connection failed !!!!" << "\n";

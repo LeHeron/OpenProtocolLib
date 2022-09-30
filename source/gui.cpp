@@ -108,12 +108,4 @@ void GUI::doConnect()
     QString addr = "192.168.1.100";
     if (!dp.doConnect(addr))
         return;
-
-    mid_ptr initMid = DOpenProtocolMap::getMap()[DOpenProtocolMid::MID0001]->createMid({});
-    connect(initMid.get(), &DOpenProtocolMid::onResponse, this, [this, initMid](){
-        if (initMid->getResponse()->mid_ID == 2)
-            emit connected(true);
-    });
-
-    dp.sendMid(initMid);
 }

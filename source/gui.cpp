@@ -30,6 +30,7 @@
 GUI::GUI(QObject *parent)
     : QObject{parent}
 {
+    connect(&dp, &DOpenProtocol::connected, this, [this](){emit connected(true);});
     connect(&dp, &DOpenProtocol::disconnected, this, [this](){emit connected(false);});
     connect(&dp, &DOpenProtocol::onSubscription, this, &GUI::bindSubscription);
 }

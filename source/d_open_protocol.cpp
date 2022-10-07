@@ -31,6 +31,7 @@
 #include "d_open_protocol_factory_base.h"
 #include "mids/d_mid9999.h"
 #include <QObject>
+#include <QList>
 #include <cmath>
 
 #define TIMEOUT 3000
@@ -79,32 +80,44 @@ bool DOpenProtocol::doConnect(QString& addr, int port)
     return true;
 }
 
-void DOpenProtocol::readMid() { // TODO read multiple MID in buffer
+void DOpenProtocol::readMid() {
     startTimer();
-    mid_ptr received_mid = DOpenProtocolMid::decodeMid(socket.read(BUFFER_READ));
+    QByteArray arr = socket.read(BUFFER_READ);
+    QList<mid_ptr> midList;
 
-    // Checking special signals
-    if (received_mid->mid_ID == 2)
-        emit connected();
-    if (received_mid->mid_ID == 3)
-    {
-        sendMid(DOpenProtocolMap::getMap()[DOpenProtocolMid::MID0005]->createMid({}));
-        emit disconnected();
+    int last = 0;
+    int pos = -1;
+    while ((pos = arr.indexOf('\x00', pos + 1)) != -1) {
+           //QByteArray midArr = arr.mid(last, pos - last + 1);
+           midList.append(DOpenProtocolMid::decodeMid(arr.mid(last, pos - last + 1)));
+           last = pos;
     }
+    //mid_ptr received_mid = DOpenProtocolMid::decodeMid(socket.read(BUFFER_READ));
 
-    // Assigning response
-    for (auto it = waiting_response_queue.begin(); it != waiting_response_queue.end(); it++) {
-
-        QVector<DOpenProtocolMid::midType>* valid_responses = (*it)->getValidResponses();
-        if (valid_responses->contains(received_mid->mid_ID)) { // Response of former request
-            (*it)->setResponse(received_mid);
-            waiting_response_queue.erase(it);
-            return;
+    for (mid_ptr received_mid : midList) {
+        // Checking special signals
+        if (received_mid->mid_ID == 2)
+            emit connected();
+        if (received_mid->mid_ID == 3)
+        {
+            sendMid(DOpenProtocolMap::getMap()[DOpenProtocolMid::MID0005]->createMid({}));
+            emit disconnected();
         }
-    }
 
-    // No response found -> subscription
-    emit onSubscription(received_mid);
+        // Assigning response
+        for (auto it = waiting_response_queue.begin(); it != waiting_response_queue.end(); it++) {
+
+            QVector<DOpenProtocolMid::midType>* valid_responses = (*it)->getValidResponses();
+            if (valid_responses->contains(received_mid->mid_ID)) { // Response of former request
+                (*it)->setResponse(received_mid);
+                waiting_response_queue.erase(it);
+                return;
+            }
+        }
+
+        // No response found -> subscription
+        emit onSubscription(received_mid);
+    }
 }
 
 

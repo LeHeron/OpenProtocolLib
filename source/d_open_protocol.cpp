@@ -90,7 +90,7 @@ void DOpenProtocol::readMid() {
     while ((pos = arr.indexOf('\x00', pos + 1)) != -1) {
            //QByteArray midArr = arr.mid(last, pos - last + 1);
            midList.append(DOpenProtocolMid::decodeMid(arr.mid(last, pos - last + 1)));
-           last = pos;
+           last = pos + 1;
     }
     //mid_ptr received_mid = DOpenProtocolMid::decodeMid(socket.read(BUFFER_READ));
 
